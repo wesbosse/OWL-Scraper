@@ -4,22 +4,22 @@ using HtmlAgilityPack;
 using ScrapySharp.Html.Parsing;
 using ScrapySharp.Core;
 using ScrapySharp.Extensions;
+using OpenQA.Selenium;
+using OpenQA.Selenium.Firefox;
 
 namespace OwlScraper
 {
-    class MainClass
+    class mainClass
     {
         public string read()
         {
-            //instantiate the html parsing
-            HtmlWeb htmlWeb = new HtmlWeb();
             try
             {
-                //load the webpage with match info
-                HtmlAgilityPack.HtmlDocument document = htmlWeb.Load("https://sports.bovada.lv/e-sports/other-e-sports/overwatch");
+                IWebDriver driver = new FirefoxDriver();
+                driver.Url = "http://www.oddsportal.com/esports/usa/overwatch-overwatch-league/results/";
+                String PageSource = driver.PageSource;
 
-                //return the html body only
-                return document.DocumentNode.InnerHtml;
+                return PageSource;
             }
             catch (Exception e)
             {
@@ -32,16 +32,23 @@ namespace OwlScraper
         public static void Main(string[] args)
         {
             //instantiate our class
-            MainClass mainClass = new MainClass();
+            mainClass mainClass = new mainClass();
 
-            HtmlWeb htmlWeb = new HtmlWeb();
+            HtmlDocument htmlWeb = new HtmlDocument();
 
             //use our newly defined read function to grab the html
-            HtmlAgilityPack.HtmlDocument pageHtml = htmlWeb.Load(mainClass.read());
+            htmlWeb.LoadHtml(mainClass.read());
 
             //print it all out
-            Console.WriteLine(pageHtml);
-            string link = pageHtml.DocumentNode.CssSelect(".table-of-content .head-row td.download a.text-pdf").Single().Attributes["href"].Value.ToString();
+            Console.WriteLine(htmlWeb.ToString());
+
+            Array tableRows = htmlWeb.DocumentNode.CssSelect(".tournamentTable tr").ToArray();
+
+            foreach (HtmlAgilityPack.HtmlDocument item in tableRows)
+            {
+                Console.WriteLine(item.DocumentNode.InnerHtml);
+            }
+
             Console.ReadLine();
         }
     }

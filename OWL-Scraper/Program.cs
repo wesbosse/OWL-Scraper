@@ -5,7 +5,7 @@ using ScrapySharp.Html.Parsing;
 using ScrapySharp.Core;
 using ScrapySharp.Extensions;
 using OpenQA.Selenium;
-using OpenQA.Selenium.Firefox;
+using OpenQA.Selenium.Chrome;
 
 namespace OwlScraper
 {
@@ -15,7 +15,7 @@ namespace OwlScraper
         {
             try
             {
-                IWebDriver driver = new FirefoxDriver();
+                IWebDriver driver = new ChromeDriver();
                 driver.Url = "http://www.oddsportal.com/esports/usa/overwatch-overwatch-league/results/";
                 String PageSource = driver.PageSource;
 
@@ -39,14 +39,11 @@ namespace OwlScraper
             //use our newly defined read function to grab the html
             htmlWeb.LoadHtml(mainClass.read());
 
-            //print it all out
-            Console.WriteLine(htmlWeb.ToString());
+            Array tableRows = htmlWeb.DocumentNode.CssSelect("table#tournamentTable tr").ToArray();
 
-            Array tableRows = htmlWeb.DocumentNode.CssSelect(".tournamentTable tr").ToArray();
-
-            foreach (HtmlAgilityPack.HtmlDocument item in tableRows)
+            foreach (var item in tableRows)
             {
-                Console.WriteLine(item.DocumentNode.InnerHtml);
+                Console.WriteLine(item);
             }
 
             Console.ReadLine();

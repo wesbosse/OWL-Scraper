@@ -37,16 +37,18 @@ namespace OwlScraper
             //instantiate our class
             mainClass mainClass = new mainClass();
 
+            //create a new html doc to store our loaded html string
             HtmlDocument htmlWeb = new HtmlDocument();
 
             //use our newly defined read function to grab the html
             htmlWeb.LoadHtml(mainClass.read());
 
+            //within the html, find the tournament table rows and store them in an array
             Array tableRows = htmlWeb.DocumentNode.CssSelect("table#tournamentTable tr").ToArray();
 
             foreach (html item in tableRows)
             {
-                Console.WriteLine(item.DocumentNode.);
+                Console.WriteLine(item.DocumentNode);
             }
 
             Console.ReadLine();

@@ -15,8 +15,11 @@ namespace OwlScraper
         {
             try
             {
+                //instantiate the chrome web driver
                 IWebDriver driver = new ChromeDriver();
                 driver.Url = "http://www.oddsportal.com/esports/usa/overwatch-overwatch-league/results/";
+
+                //grab page html as a string for parsing
                 String PageSource = driver.PageSource;
 
                 return PageSource;
@@ -41,9 +44,9 @@ namespace OwlScraper
 
             Array tableRows = htmlWeb.DocumentNode.CssSelect("table#tournamentTable tr").ToArray();
 
-            foreach (var item in tableRows)
+            foreach (html item in tableRows)
             {
-                Console.WriteLine(item);
+                Console.WriteLine(item.DocumentNode.);
             }
 
             Console.ReadLine();
